@@ -1,9 +1,18 @@
-package com.example.animelist
+package com.example.animelist.data
 
+import com.example.animelist.R
 import com.example.animelist.model.Anime
 import com.example.animelist.model.AnimeGenreType
 
 object LocalDataProvider {
+    val genreList = listOf(
+        AnimeGenreType.Kodomomuke,
+        AnimeGenreType.Shonen,
+        AnimeGenreType.Shojo,
+        AnimeGenreType.Seinen,
+        AnimeGenreType.Josei
+    )
+
     val animeList = listOf(
         Anime(
             id = 1,
