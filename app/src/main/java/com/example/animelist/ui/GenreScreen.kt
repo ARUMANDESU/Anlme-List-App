@@ -1,6 +1,7 @@
 package com.example.animelist.ui
 
 import android.content.res.Configuration
+import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -9,6 +10,7 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,6 +39,7 @@ import com.example.animelist.ui.theme.AnimeListTheme
 fun GenreScreen(
     uiState: AnimeUiState,
     onAnimeClick: (Anime) -> Unit,
+    onDetailsScreenBackPresed: () -> Unit,
     modifier: Modifier = Modifier
 ){
     if (uiState.isShowingGenrePage){
@@ -48,7 +51,8 @@ fun GenreScreen(
     }else{
         AnimeDetails(
             currentAnime = uiState.currentAnime,
-            modifier = modifier
+            onBackPressed = onDetailsScreenBackPresed,
+            modifier = modifier.padding(horizontal = dimensionResource(R.dimen.padding_medium))
         )
     }
 }
@@ -124,10 +128,19 @@ fun GenreListItemImage(
 @Composable
 fun AnimeDetails(
     currentAnime: Anime,
+    onBackPressed: () -> Unit,
     modifier: Modifier = Modifier
 ){
+    BackHandler {
+        onBackPressed()
+    }
     Column(modifier = modifier) {
-        Image(painter = painterResource(currentAnime.image), contentDescription = null)
+        AnimeDetailsImage(
+            imageRes = currentAnime.image,
+            modifier = Modifier
+                .height(dimensionResource(R.dimen.details_image_max_height))
+                .fillMaxWidth()
+        )
         Column(modifier = Modifier.padding(vertical = dimensionResource(R.dimen.padding_big))) {
             Text(
                 text = stringResource(R.string.seasons, currentAnime.seasons),
@@ -151,12 +164,26 @@ fun AnimeDetails(
 
 }
 
-
+@Composable
+fun AnimeDetailsImage(
+    @DrawableRes imageRes: Int,
+    modifier: Modifier = Modifier
+){
+    Box(modifier = modifier){
+        Image(
+            painter = painterResource(imageRes),
+            contentDescription = null,
+            contentScale = ContentScale.Crop,
+            modifier = Modifier.fillMaxSize()
+        )
+    }
+}
 
 @Composable
 fun GenreListAndAnimeDetails(
     currentAnimeList: List<Anime>,
     currentAnime: Anime,
+    onBackPressed: () -> Unit,
     onClick: (Anime) -> Unit,
     modifier: Modifier = Modifier
 ){
@@ -170,6 +197,7 @@ fun GenreListAndAnimeDetails(
         )
         AnimeDetails(
             currentAnime = currentAnime,
+            onBackPressed = onBackPressed,
             modifier = Modifier
                 .weight(3f)
                 .padding(horizontal = dimensionResource(R.dimen.padding_medium))
@@ -223,7 +251,8 @@ fun AnimeDetailsPreview(){
             color = MaterialTheme.colorScheme.background
         ) {
             AnimeDetails(
-                currentAnime = LocalDataProvider.defaultAnime,
+                currentAnime = LocalDataProvider.animeList[5],
+                onBackPressed = {},
                 modifier = Modifier.padding(
                     dimensionResource(R.dimen.padding_small)
                 )
@@ -248,6 +277,7 @@ fun GenreListAndAnimeDetailsPreview(){
                 currentAnime = uiState.currentAnime,
                 currentAnimeList = uiState.currentGenreAnime,
                 onClick = {},
+                onBackPressed = {},
                 modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
             )
         }
@@ -268,6 +298,7 @@ fun GenreListAndAnimeDetailsPreview2(){
                 currentAnime = uiState.currentAnime,
                 currentAnimeList = uiState.currentGenreAnime,
                 onClick = {},
+                onBackPressed = {},
                 modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
             )
         }

@@ -2,6 +2,7 @@
 <resources>
     <dimen name="grid_image_medium_height">140dp</dimen>
     <dimen name="list_image_medium">70dp</dimen>
+    <dimen name="details_image_max_height">212dp</dimen>
 
     <dimen name="padding_big">32dp</dimen>
     <dimen name="padding_medium">16dp</dimen>
