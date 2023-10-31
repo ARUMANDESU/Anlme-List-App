@@ -89,7 +89,7 @@ fun GridItemImage(
     modifier: Modifier = Modifier
 ){
     Box(
-        modifier = modifier.fillMaxWidth().size(dimensionResource(R.dimen.list_image_medium_height)),
+        modifier = modifier.fillMaxWidth().size(dimensionResource(R.dimen.grid_image_medium_height)),
         contentAlignment = Alignment.Center
     ){
         Image(

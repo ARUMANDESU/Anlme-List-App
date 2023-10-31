@@ -240,4 +240,7 @@ object LocalDataProvider {
             image = R.drawable.kids_on_the_slope_image
         ),
     )
+
+    val defaultAnime = animeList[0]
+    val defaultGenre = genreList[0]
 }

@@ -25,4 +25,8 @@
     <string name="princess_jellyfish_description">Princess Jellyfish is a charming and quirky series that centers around a group of socially awkward women living in an apartment complex. Their lives take a whimsical turn when they befriend Tsukimi Kurashita, who dreams of becoming an illustrator. The series explores themes of friendship, self-acceptance, and pursuing one\'s passions. It celebrates the unique qualities of its characters and the idea that individuals can find acceptance and belonging through shared interests and supportive communities</string>
     <string name="chihayafuru_description">The Chihayafuru series is a sports anime that focuses on the Japanese card game karuta. It follows Chihaya Ayase and her friends as they pursue their passion for karuta and compete in tournaments. The series highlights themes of dedication, competition, and the love of a traditional Japanese sport. Chihayafuru beautifully showcases the art and strategy of karuta while portraying the friendships and rivalries that emerge within the karuta community.\n</string>
     <string name="kids_on_the_slope_description">Kids on the Slope is a coming-of-age series set in the 1960s that centers around Kaoru Nishimi, a high school student, and Sentaro Kawabuchi, a talented jazz drummer. Their shared love for music leads to deep friendships and personal growth. The series explores themes of music, friendship, and the challenges of youth. It combines a passion for jazz music with the trials and tribulations of adolescence, portraying the transformative power of artistic expression and human connection.</string>
+
+    <string name="seasons">seasons: %d</string>
+    <string name="episodes">episodes: %d</string>
+
 </resources>
