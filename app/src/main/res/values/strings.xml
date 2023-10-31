@@ -28,5 +28,6 @@
 
     <string name="seasons">seasons: %d</string>
     <string name="episodes">episodes: %d</string>
+    <string name="back_button">back button</string>
 
 </resources>

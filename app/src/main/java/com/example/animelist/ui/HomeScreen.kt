@@ -14,8 +14,11 @@ import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -23,6 +26,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.animelist.R
@@ -30,29 +34,45 @@ import com.example.animelist.data.LocalDataProvider
 import com.example.animelist.model.AnimeGenreType
 import com.example.animelist.ui.theme.AnimeListTheme
 
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun HomeScreenTopBar(){
+    CenterAlignedTopAppBar(
+        colors = TopAppBarDefaults.mediumTopAppBarColors(
+            containerColor = MaterialTheme.colorScheme.primaryContainer
+        ),
+        title = {
+            Text(text = stringResource(R.string.app_name))
+        }
+    )
+}
 @Composable
 fun HomeScreen(
     genres: List<AnimeGenreType>,
     onClick: (AnimeGenreType) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column (
+
+    LazyVerticalGrid(
+        columns = GridCells.Adaptive(minSize = 300.dp),
         modifier = modifier
     ){
-        LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 300.dp) ){
-            items(genres){genre ->
-                HomeScreenGridItem(
-                    genre = genre,
-                    modifier = Modifier
-                        .clip(MaterialTheme.shapes.small)
-                        .padding(
-                            dimensionResource(R.dimen.padding_medium)
-                        )
-                        .clickable { onClick(genre) }
-                )
-            }
+        item {
+            HomeScreenTopBar()
+        }
+        items(genres){genre ->
+            HomeScreenGridItem(
+                genre = genre,
+                modifier = Modifier
+                    .clip(MaterialTheme.shapes.small)
+                    .padding(
+                        dimensionResource(R.dimen.padding_medium)
+                    )
+                    .clickable { onClick(genre) }
+            )
         }
     }
+
 
 }
 
@@ -64,8 +84,8 @@ fun HomeScreenGridItem(
     Card(
         modifier = modifier,
         colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.secondaryContainer,
-            contentColor = MaterialTheme.colorScheme.onSecondaryContainer
+            containerColor = MaterialTheme.colorScheme.primaryContainer,
+            contentColor = MaterialTheme.colorScheme.onPrimaryContainer
         )
     ) {
         Column (
@@ -89,7 +109,9 @@ fun GridItemImage(
     modifier: Modifier = Modifier
 ){
     Box(
-        modifier = modifier.fillMaxWidth().size(dimensionResource(R.dimen.grid_image_medium_height)),
+        modifier = modifier
+            .fillMaxWidth()
+            .size(dimensionResource(R.dimen.grid_image_medium_height)),
         contentAlignment = Alignment.Center
     ){
         Image(
