@@ -67,7 +67,9 @@ fun GenreList(
         items(currentAnimeList){ anime ->
             GenreListItem(
                 anime = anime,
-                modifier = modifier.clickable { onClick(anime) }
+                modifier = modifier
+                    .padding(vertical = dimensionResource(R.dimen.padding_small))
+                    .clickable { onClick(anime) }
             )
         }
     }
@@ -153,9 +155,26 @@ fun AnimeDetails(
 
 @Composable
 fun GenreListAndAnimeDetails(
+    currentAnimeList: List<Anime>,
+    currentAnime: Anime,
+    onClick: (Anime) -> Unit,
     modifier: Modifier = Modifier
 ){
+    Row (modifier = modifier){
+        GenreList(
+            currentAnimeList = currentAnimeList,
+            onClick = onClick,
+            modifier = Modifier
+                .weight(2f)
 
+        )
+        AnimeDetails(
+            currentAnime = currentAnime,
+            modifier = Modifier
+                .weight(3f)
+                .padding(horizontal = dimensionResource(R.dimen.padding_medium))
+        )
+    }
 }
 
 @Preview("Light theme")
@@ -175,6 +194,27 @@ fun GenreListItemPreview(){
 @Preview("Light theme")
 @Preview("Dark theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
+fun GenreListPreview(){
+
+    AnimeListTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            GenreList(
+                currentAnimeList = AnimeUiState().currentGenreAnime,
+                onClick = {},
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_small))
+            )
+        }
+
+    }
+
+}
+
+@Preview("Light theme")
+@Preview("Dark theme", uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
 fun AnimeDetailsPreview(){
 
     AnimeListTheme {
@@ -185,11 +225,51 @@ fun AnimeDetailsPreview(){
             AnimeDetails(
                 currentAnime = LocalDataProvider.defaultAnime,
                 modifier = Modifier.padding(
-                    dimensionResource(R.dimen.padding_medium)
+                    dimensionResource(R.dimen.padding_small)
                 )
             )
         }
 
     }
 
+}
+
+@Preview("Light theme", widthDp = 600, heightDp = 1100)
+@Preview("Dark theme", widthDp = 600, heightDp = 1100 , uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun GenreListAndAnimeDetailsPreview(){
+    AnimeListTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            val uiState = AnimeUiState()
+            GenreListAndAnimeDetails(
+                currentAnime = uiState.currentAnime,
+                currentAnimeList = uiState.currentGenreAnime,
+                onClick = {},
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
+            )
+        }
+    }
+}
+
+@Preview("Light theme", widthDp = 1100, heightDp = 600)
+@Preview("Dark theme", widthDp = 1100, heightDp = 600 , uiMode = Configuration.UI_MODE_NIGHT_YES)
+@Composable
+fun GenreListAndAnimeDetailsPreview2(){
+    AnimeListTheme {
+        Surface(
+            modifier = Modifier.fillMaxSize(),
+            color = MaterialTheme.colorScheme.background
+        ) {
+            val uiState = AnimeUiState()
+            GenreListAndAnimeDetails(
+                currentAnime = uiState.currentAnime,
+                currentAnimeList = uiState.currentGenreAnime,
+                onClick = {},
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
+            )
+        }
+    }
 }
