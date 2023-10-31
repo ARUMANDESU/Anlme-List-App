@@ -6,10 +6,12 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
@@ -22,6 +24,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.example.animelist.R
 import com.example.animelist.data.LocalDataProvider
 import com.example.animelist.model.AnimeGenreType
@@ -36,23 +39,25 @@ fun HomeScreen(
     Column (
         modifier = modifier
     ){
-        genres.forEach{ genre ->
-            HomeScreenListItem(
-                genre = genre,
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.small)
-                    .padding(
-                        dimensionResource(R.dimen.padding_medium)
-                    )
-                    .clickable { onClick(genre) }
-            )
+        LazyVerticalGrid(columns = GridCells.Adaptive(minSize = 300.dp) ){
+            items(genres){genre ->
+                HomeScreenGridItem(
+                    genre = genre,
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.small)
+                        .padding(
+                            dimensionResource(R.dimen.padding_medium)
+                        )
+                        .clickable { onClick(genre) }
+                )
+            }
         }
     }
 
 }
 
 @Composable
-fun HomeScreenListItem(
+fun HomeScreenGridItem(
     genre: AnimeGenreType,
     modifier: Modifier = Modifier
 ){
@@ -63,13 +68,12 @@ fun HomeScreenListItem(
             contentColor = MaterialTheme.colorScheme.onSecondaryContainer
         )
     ) {
-        Row (
+        Column (
             modifier = Modifier
-                .fillMaxWidth()
-                .padding(dimensionResource(R.dimen.padding_small)),
-            verticalAlignment = Alignment.CenterVertically
+                .fillMaxWidth(),
+            horizontalAlignment = Alignment.CenterHorizontally
         ){
-            ListItemImage(imageRes = genre.imageRes)
+            GridItemImage(imageRes = genre.imageRes)
             Text(
                 text = genre.name,
                 modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium)),
@@ -80,15 +84,12 @@ fun HomeScreenListItem(
 }
 
 @Composable
-fun ListItemImage(
+fun GridItemImage(
     @DrawableRes imageRes: Int,
     modifier: Modifier = Modifier
 ){
     Box(
-        modifier = modifier.size(
-            width =  dimensionResource(R.dimen.list_image_medium),
-            height = dimensionResource(R.dimen.list_image_medium),
-            ),
+        modifier = modifier.fillMaxWidth().size(dimensionResource(R.dimen.list_image_medium_height)),
         contentAlignment = Alignment.Center
     ){
         Image(
