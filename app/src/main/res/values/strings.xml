@@ -30,4 +30,8 @@
     <string name="episodes">episodes: %d</string>
     <string name="back_button">back button</string>
 
+    <string name="home_top_bar">Home Top Bar</string>
+    <string name="genre_top_bar">Genre Top Bar</string>
+    <string name="details_top_bar">Details Top Bar</string>
+
 </resources>

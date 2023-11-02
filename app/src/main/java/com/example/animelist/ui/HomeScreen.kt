@@ -25,6 +25,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -37,14 +38,17 @@ import com.example.animelist.ui.theme.AnimeListTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun HomeScreenTopBar(){
+fun HomeScreenTopBar(
+    modifier: Modifier = Modifier
+){
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.mediumTopAppBarColors(
             containerColor = MaterialTheme.colorScheme.primaryContainer
         ),
         title = {
             Text(text = stringResource(R.string.app_name))
-        }
+        },
+        modifier = modifier
     )
 }
 @OptIn(ExperimentalMaterial3Api::class)
@@ -57,7 +61,9 @@ fun HomeScreen(
 
     Scaffold(
         topBar = {
-            HomeScreenTopBar()
+            HomeScreenTopBar(
+                modifier = Modifier.testTag(stringResource(R.string.home_top_bar))
+            )
         },
         modifier = modifier
     ) {innerPadding ->

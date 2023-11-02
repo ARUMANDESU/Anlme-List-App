@@ -32,6 +32,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -48,7 +49,8 @@ import com.example.animelist.ui.theme.AnimeListTheme
 @Composable
 fun GenreListTopBar(
     title: String,
-    onBackPressed: () -> Unit
+    onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier,
 ){
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.mediumTopAppBarColors(
@@ -64,7 +66,8 @@ fun GenreListTopBar(
         },
         title = {
             Text(text = title)
-        }
+        },
+        modifier = modifier
     )
 
 }
@@ -100,7 +103,6 @@ fun GenreScreen(
             currentAnimeList = uiState.currentGenreAnime,
             currentAnime = uiState.currentAnime,
             onBackPressed = onBackPressed,
-            onDetailsScreenBackPressed = onDetailsScreenBackPressed,
             onClick = onAnimeClick
         )
     }
@@ -123,7 +125,8 @@ fun GenreList(
         item {
             GenreListTopBar(
                 title = genre.name,
-                onBackPressed = onBackPressed
+                onBackPressed = onBackPressed,
+                modifier = Modifier.testTag(stringResource(R.string.genre_top_bar))
             )
         }
         items(currentAnimeList){ anime ->
@@ -188,6 +191,7 @@ fun GenreListItemImage(
 fun AnimeDetailsTopBar(
     animeName: String,
     onBackPressed: () -> Unit,
+    modifier: Modifier = Modifier,
 ){
     CenterAlignedTopAppBar(
         colors = TopAppBarDefaults.mediumTopAppBarColors(
@@ -205,7 +209,8 @@ fun AnimeDetailsTopBar(
         },
         title = {
             Text(text = animeName)
-        }
+        },
+        modifier = modifier,
     )
 }
 
@@ -226,7 +231,8 @@ fun AnimeDetails(
             AnimatedVisibility(visible = isFullScreen) {
                 AnimeDetailsTopBar(
                     currentAnime.title,
-                    onBackPressed = onBackPressed
+                    onBackPressed = onBackPressed,
+                    modifier = Modifier.testTag(stringResource(R.string.details_top_bar))
                 )
             }
             AnimeDetailsCard(
@@ -309,7 +315,6 @@ fun GenreListAndAnimeDetails(
     currentAnimeList: List<Anime>,
     currentAnime: Anime,
     onBackPressed: () -> Unit,
-    onDetailsScreenBackPressed: () -> Unit,
     onClick: (Anime) -> Unit,
     modifier: Modifier = Modifier
 ){
@@ -325,7 +330,7 @@ fun GenreListAndAnimeDetails(
         )
         AnimeDetails(
             currentAnime = currentAnime,
-            onBackPressed = onDetailsScreenBackPressed,
+            onBackPressed = onBackPressed,
             isFullScreen = false,
             modifier = Modifier
                 .weight(3f)
@@ -410,7 +415,6 @@ fun GenreListAndAnimeDetailsPreview(){
                 currentAnimeList = uiState.currentGenreAnime,
                 onClick = {},
                 onBackPressed = {},
-                onDetailsScreenBackPressed = {},
                 modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
             )
         }
@@ -433,7 +437,6 @@ fun GenreListAndAnimeDetailsPreview2(){
                 currentAnimeList = uiState.currentGenreAnime,
                 onClick = {},
                 onBackPressed = {},
-                onDetailsScreenBackPressed = {},
                 modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
             )
         }
