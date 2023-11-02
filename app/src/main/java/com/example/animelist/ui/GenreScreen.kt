@@ -3,6 +3,7 @@ package com.example.animelist.ui
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
@@ -45,7 +46,7 @@ import com.example.animelist.ui.theme.AnimeListTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GenreScreenTopBar(
+fun GenreListTopBar(
     title: String,
     onBackPressed: () -> Unit
 ){
@@ -71,26 +72,39 @@ fun GenreScreenTopBar(
 @Composable
 fun GenreScreen(
     uiState: AnimeUiState,
+    screenContentType: ScreenContentType,
     onAnimeClick: (Anime) -> Unit,
     onBackPressed: () -> Unit,
     onDetailsScreenBackPressed: () -> Unit,
     modifier: Modifier = Modifier
 ){
-    if (uiState.isShowingGenrePage){
-        GenreList(
+    if (screenContentType == ScreenContentType.LIST_ONLY){
+        if (uiState.isShowingGenrePage){
+            GenreList(
+                genre = uiState.currentGenre,
+                currentAnimeList = uiState.currentGenreAnime,
+                onBackPressed = onBackPressed,
+                onClick = onAnimeClick,
+                modifier = modifier
+            )
+        }else{
+            AnimeDetails(
+                currentAnime = uiState.currentAnime,
+                onBackPressed = onDetailsScreenBackPressed,
+                modifier = modifier
+            )
+        }
+    }else{
+        GenreListAndAnimeDetails(
             genre = uiState.currentGenre,
             currentAnimeList = uiState.currentGenreAnime,
-            onBackPressed = onBackPressed,
-            onClick = onAnimeClick,
-            modifier = modifier
-        )
-    }else{
-        AnimeDetails(
             currentAnime = uiState.currentAnime,
-            onBackPressed = onDetailsScreenBackPressed,
-            modifier = modifier
+            onBackPressed = onBackPressed,
+            onDetailsScreenBackPressed = onDetailsScreenBackPressed,
+            onClick = onAnimeClick
         )
     }
+
 }
 
 
@@ -107,7 +121,7 @@ fun GenreList(
         modifier = modifier
     ){
         item {
-            GenreScreenTopBar(
+            GenreListTopBar(
                 title = genre.name,
                 onBackPressed = onBackPressed
             )
@@ -200,7 +214,8 @@ fun AnimeDetailsTopBar(
 fun AnimeDetails(
     currentAnime: Anime,
     onBackPressed: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    isFullScreen: Boolean = true,
 ){
 
     BackHandler {
@@ -208,10 +223,12 @@ fun AnimeDetails(
     }
     LazyColumn(modifier = modifier){
         item {
-            AnimeDetailsTopBar(
-                currentAnime.title,
-                onBackPressed = onBackPressed
-            )
+            AnimatedVisibility(visible = isFullScreen) {
+                AnimeDetailsTopBar(
+                    currentAnime.title,
+                    onBackPressed = onBackPressed
+                )
+            }
             AnimeDetailsCard(
                 currentAnime = currentAnime,
                 modifier = Modifier.padding(
@@ -309,6 +326,7 @@ fun GenreListAndAnimeDetails(
         AnimeDetails(
             currentAnime = currentAnime,
             onBackPressed = onDetailsScreenBackPressed,
+            isFullScreen = false,
             modifier = Modifier
                 .weight(3f)
                 .padding(horizontal = dimensionResource(R.dimen.padding_medium))

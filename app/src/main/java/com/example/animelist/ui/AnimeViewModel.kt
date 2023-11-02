@@ -19,7 +19,10 @@ class AnimeViewModel: ViewModel() {
 
     fun updateCurrentGenre(genre: AnimeGenreType){
         _uiState.update {
-            it.copy(currentGenre = genre)
+            it.copy(
+                currentGenre = genre,
+                currentAnime = it.genreAnime[genre]?.get(0) ?: it.currentAnime
+            )
         }
     }
 

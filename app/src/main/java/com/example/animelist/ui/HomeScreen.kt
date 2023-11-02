@@ -17,6 +17,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
@@ -46,6 +47,7 @@ fun HomeScreenTopBar(){
         }
     )
 }
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun HomeScreen(
     genres: List<AnimeGenreType>,
@@ -53,25 +55,28 @@ fun HomeScreen(
     modifier: Modifier = Modifier
 ) {
 
-    LazyVerticalGrid(
-        columns = GridCells.Adaptive(minSize = 300.dp),
-        modifier = modifier
-    ){
-        item {
+    Scaffold(
+        topBar = {
             HomeScreenTopBar()
-        }
-        items(genres){genre ->
-            HomeScreenGridItem(
-                genre = genre,
-                modifier = Modifier
-                    .clip(MaterialTheme.shapes.small)
-                    .padding(
-                        dimensionResource(R.dimen.padding_medium)
-                    )
-                    .clickable { onClick(genre) }
-            )
+        },
+        modifier = modifier
+    ) {innerPadding ->
+        LazyVerticalGrid(
+            columns = GridCells.Adaptive(minSize = 300.dp),
+            modifier = Modifier.padding(innerPadding)
+        ){
+            items(genres){genre ->
+                HomeScreenGridItem(
+                    genre = genre,
+                    modifier = Modifier
+                        .clip(MaterialTheme.shapes.small)
+                        .padding(dimensionResource(R.dimen.padding_medium))
+                        .clickable { onClick(genre) }
+                )
+            }
         }
     }
+
 
 
 }
