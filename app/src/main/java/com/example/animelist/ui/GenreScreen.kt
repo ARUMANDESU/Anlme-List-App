@@ -3,6 +3,7 @@ package com.example.animelist.ui
 import android.content.res.Configuration
 import androidx.activity.compose.BackHandler
 import androidx.annotation.DrawableRes
+import androidx.annotation.StringRes
 import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
@@ -18,6 +19,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -29,6 +31,10 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.layout.ContentScale
@@ -38,6 +44,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.window.Dialog
 import com.example.animelist.R
 import com.example.animelist.data.LocalDataProvider
 import com.example.animelist.model.Anime
@@ -50,6 +57,7 @@ import com.example.animelist.ui.theme.AnimeListTheme
 fun GenreListTopBar(
     title: String,
     onBackPressed: () -> Unit,
+    onInfoPressed: () -> Unit,
     modifier: Modifier = Modifier,
 ){
     CenterAlignedTopAppBar(
@@ -62,6 +70,14 @@ fun GenreListTopBar(
                     imageVector = Icons.Filled.ArrowBack,
                     contentDescription = stringResource(R.string.back_button)
                 )
+            }
+        },
+        actions = {
+            IconButton(onClick = onInfoPressed) {
+              Icon(
+                  imageVector = Icons.Filled.Info,
+                  contentDescription = stringResource(R.string.info_button)
+              )
             }
         },
         title = {
@@ -110,6 +126,26 @@ fun GenreScreen(
 }
 
 
+@Composable
+fun GenreListInfoDialog(
+    @StringRes genreInfoRes: Int,
+    onDismissRequest: () -> Unit,
+){
+    Dialog(onDismissRequest = onDismissRequest) {
+        Card(
+            colors = CardDefaults.cardColors(
+                containerColor = MaterialTheme.colorScheme.tertiaryContainer,
+                contentColor = MaterialTheme.colorScheme.onTertiaryContainer
+            ),
+        ) {
+            Text(
+                text = stringResource(genreInfoRes),
+                modifier = Modifier.padding(dimensionResource(R.dimen.padding_medium))
+            )
+        }
+    }
+}
+
 
 @Composable
 fun GenreList(
@@ -119,6 +155,8 @@ fun GenreList(
     onClick: (Anime) -> Unit,
     modifier: Modifier = Modifier
 ){
+    var openGenreInfoDialog by remember { mutableStateOf(false) }
+
     LazyColumn(
         modifier = modifier
     ){
@@ -126,6 +164,7 @@ fun GenreList(
             GenreListTopBar(
                 title = genre.name,
                 onBackPressed = onBackPressed,
+                onInfoPressed = {openGenreInfoDialog = true},
                 modifier = Modifier.testTag(stringResource(R.string.genre_top_bar))
             )
         }
@@ -137,6 +176,13 @@ fun GenreList(
                     .clickable { onClick(anime) }
             )
         }
+    }
+
+    AnimatedVisibility(visible = openGenreInfoDialog) {
+        GenreListInfoDialog(
+            genreInfoRes = genre.infoRes,
+            onDismissRequest = {openGenreInfoDialog = false}
+        )
     }
 }
 
